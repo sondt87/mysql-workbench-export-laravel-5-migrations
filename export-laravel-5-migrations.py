@@ -158,7 +158,8 @@ def generate_laravel5_migration(cat):
             table_references = []
 
             for key in tbl.foreignKeys:
-                if key.name != '' and tbl.name != key.referencedColumns[0].owner.name and hasattr(key,
+
+                if key.name != '' and len(key.referencedColumns) > 0 and tbl.name != key.referencedColumns[0].owner.name and hasattr(key,
                                                                                                   'referencedColumns'):
                     table_references.append(key.referencedColumns[0].owner.name)
 
@@ -418,7 +419,8 @@ def generate_laravel5_migration(cat):
 
                     migrations[ti].append("        });\n")
 
-                    for key, val in foreign_keys.iteritems():
+                    for key in foreign_keys.keys():
+                        val = foreign_keys[key]
                         if key == tbl.name:
                             keyed_tables = []
                             schema_table = 0
